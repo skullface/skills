@@ -50,7 +50,7 @@ Include only actions attributable to the user: issue creation or edits, comments
 
 ### Calendar
 
-List non-declined meetings with at least one other attendee. Exclude declined events, focus blocks, reminders, out-of-office holds, and solo events. Ask exactly one question listing candidate meetings and asking which the user attended. Wait for the answer before writing. Include an attended meeting only when its title or description supplies concrete work context; fold it into the related work bullet rather than listing meetings separately.
+List non-declined meetings with at least one other attendee. Exclude declined events, focus blocks, reminders, out-of-office holds, and solo events. Ask exactly one question listing candidate meetings and asking which the user attended. Wait for the answer before writing. Include an attended meeting only when its title or description supplies concrete work context; list it as a bullet under Calls.
 
 ### Notion and Figma
 
@@ -67,12 +67,14 @@ Use these sources only when a live tool or pasted export is available. Include a
 
 ## Writing
 
-- Append bullets only. Add no generated heading, timestamp, divider, or surrounding narrative.
-- Start every bullet with `- ` and use verb-led past-tense fragments.
+- Group bullets under `### ` section subheadings in this order: Ships (merged or opened PRs and shipped commits), Admin (issue tracking, content management, planning), Calls (confirmed meetings), Reviews (PR reviews), Personal (non-work repos and activity). Omit a section with no content. Add no other heading, timestamp, divider, or surrounding narrative.
+- Start every bullet with `- ` and use verb-led past-tense fragments. Nest details as tab-indented sub-bullets.
+- Write in lowercase except for proper nouns (names, products, tools, components).
+- Wrap component names in backticks when available.
+- Link PRs as `[#12345](https://github.com/owner/repo/pull/12345)`; prefix with `owner/repo#` only when the repo owner differs from `vercel`. Link Linear issues as identifiers such as `[WEB-123](https://linear.app/...)`.
 - Use the user's own wording when it is concrete. Use PR titles when useful. Describe standalone commits functionally from their diffs.
 - State what changed. Do not infer intent, motivation, business value, impact, or sentiment.
-- Include compact links such as PR links, Linear issue identifiers, Slack thread links, and document links when available.
-- Keep bullets information-dense. Omit cosmetic-only changes, routine approvals, views, and activity not attributable to the user.
+- Keep bullets information-dense. Omit cosmetic-only changes, views, and activity not attributable to the user.
 
 ## Append
 
@@ -80,8 +82,8 @@ Write only after the GitHub preflight and, when calendar data was collected, the
 
 1. If no meaningful new activity remains, leave the journal unchanged and report that nothing was appended.
 2. If the file does not exist, write the new bullets with a trailing newline.
-3. If the file exists, append the new bullets directly after its existing content. Preserve the file byte-for-byte except for the separator needed to start a bullet and the appended bullets.
-4. If existing content does not end with a newline, add exactly one newline before the bullets. If existing content ends with prose rather than a markdown list item, add one blank line before the bullets so the list renders cleanly.
+3. If the file exists, preserve its text exactly. Insert new bullets under the matching existing section subheading rather than creating a duplicate section; create a missing section after the last existing one. When the existing file has no sections, append the new content directly after the existing content.
+4. If existing content does not end with a newline, add exactly one newline before the addition. If existing content ends with prose rather than a markdown list item, add one blank line before the addition so the list renders cleanly.
 5. After writing, report the file path and the number of bullets appended.
 
 ## Guardrails
