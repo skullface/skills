@@ -1,0 +1,13 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Big Brain",
+      "description": "Thought management and organization skills.",
+      "skills": [
+        "daily-work-journal"
+      ]
+    }
+  ]
+}
