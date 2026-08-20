@@ -1,33 +1,28 @@
 ---
-name: work-journal
-description: Generate or append a dated daily work journal from GitHub, Slack, Linear, Calendar, and optional Notion and Figma activity.
+name: daily-work-journal
+description: Generate or append a dated daily work journal from GitHub activity, with optional Slack, Linear, Calendar, Notion, and Figma sources.
 disable-model-invocation: true
 ---
 
-# Work journal
+# Daily work journal
 
 Generate or append one daily markdown entry answering "what did I work on?".
 
 ## Date and path
 
 1. Default to today in the Mac's local timezone when no date is given.
-2. Accept explicit past dates such as `August 17, 2026`, `2026-08-17`, or `26.08.17`. Treat bare month and day numbers as ambiguous and ask which date they mean.
+2. Accept explicit past dates such as `2026-08-20`. Treat bare month and day numbers as ambiguous and ask which date they mean.
 3. Reject future dates. Stop before gathering data.
-4. Resolve the target as `/Users/skull/Vercel/Journal/YYYY/YY.MM.DD.md`, where `YYYY` is the four-digit year and `YY.MM.DD` uses the last two year digits.
-5. Create only the final dated file's missing parent directories. Read the existing file before writing and preserve its content exactly.
+4. Resolve the target as `/Users/skull/personal/vournal/YYYY/MonthLongName/YYYY-MM-DD.md`, where `MonthLongName` is the full English month name. For example, `/Users/skull/personal/vournal/2026/August/2026-08-20.md`.
+5. Look in the month subdirectory to see whether the dated file already exists. Read the existing file before writing and preserve its content exactly. Create only the dated file's missing parent directories.
 
-## Required sources
+## Sources
 
-GitHub, Slack, Linear, and Calendar must each succeed through a live tool or CLI, or through pasted results supplied for the exact date. Notion and Figma are optional. Stop before writing if any required source is unavailable and no matching pasted data has been supplied.
+GitHub is the only required source. It must succeed through the live `gh` CLI or through pasted results supplied for the exact date. Authenticate with `gh auth login` if needed, then use the `gh` commands below. Stop before writing if GitHub is unavailable and no matching pasted data has been supplied; give that one retrieval instruction, then wait.
 
-When a required source is missing, give one exact retrieval instruction, then wait. Do not use a source's absence as evidence of no activity.
+Slack, Linear, Calendar, Notion, and Figma are optional. Use each one when a live tool, an authenticated CLI such as `linear-cli`, or a pasted export for the exact date is available, and skip it otherwise. Never stop or wait on an optional source, and never treat a source's absence as evidence of no activity.
 
-- **Slack:** Ask for the day's authored channel messages using a date-bounded Slack AI prompt: `Summarize my Slack activity for YYYY-MM-DD in channels only, including private channels but excluding DMs and group DMs. Include my substantive messages, decisions, investigations, feedback, coordination, and links to noteworthy threads. Do not summarize what other people did.`
-- **Linear:** Install or authenticate `linear-cli`, or ask for the day's issue activity export. With `linear-cli`, query issue changes and comments for the authenticated user within the local day; use `--me`, date filters, and `--json` where the installed version supports them.
-- **Calendar:** Ask for a date-bounded list from the primary work calendar, or use a connected calendar tool. Request non-declined events with titles, times, attendees, descriptions, and response status for `YYYY-MM-DD`.
-- **GitHub:** Authenticate with `gh auth login`, then use the `gh` commands below.
-
-If a required connector exists but returns no data, treat that as success and continue. If it errors, returns partial data, or cannot establish auth, stop before writing and ask for the exact fallback export.
+If a connected source returns no data, treat that as success and continue. If GitHub errors, returns partial data, or cannot establish auth, stop before writing and ask for the exact fallback export. If an optional source errors, skip it and continue.
 
 ## Collection
 
@@ -81,7 +76,7 @@ Use these sources only when a live tool or pasted export is available. Include a
 
 ## Append
 
-Write only after required-source preflight and calendar attendance confirmation:
+Write only after the GitHub preflight and, when calendar data was collected, the calendar attendance confirmation:
 
 1. If no meaningful new activity remains, leave the journal unchanged and report that nothing was appended.
 2. If the file does not exist, write the new bullets with a trailing newline.
@@ -92,8 +87,8 @@ Write only after required-source preflight and calendar attendance confirmation:
 ## Guardrails
 
 - Never overwrite or normalize existing journal text.
-- Never create an entry before all required sources have succeeded or supplied matching pasted data.
-- Never treat Notion or Figma as required.
+- Never create an entry before GitHub has succeeded or supplied matching pasted data.
+- Never treat Slack, Linear, Calendar, Notion, or Figma as required.
 - Never include DMs or group DMs.
 - Never list an unconfirmed meeting as attended.
 - Never use a raw commit message as a bullet.
